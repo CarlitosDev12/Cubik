@@ -1,0 +1,54 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.desoft.cubik'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.desoft.cubik"
+        ndkVersion "26.1.10909125"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0.0"
+
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++17"
+                abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86_64'
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path file('src/main/cpp/CMakeLists.txt')
+            version '3.22.1'
+        }
+    }
+    
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    
+    sourceSets {
+        main {
+            // Indicar explícitamente a Gradle dónde buscar la salida de CMake
+            jniLibs.srcDirs += ['build/intermediates/cmake/debug/obj']
+        }
+    }
+}
+
+dependencies {
+    // Al ser C++ puro con ANativeActivity, no necesitas dependencias pesadas de UI
+}
